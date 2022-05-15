@@ -56,7 +56,7 @@
   let ss = document.querySelector('shadow-script');
   
   try {
-    ss.shadowRoot.innerHTML += `<script>console.log('BREACHED!')<\/script>`;
+    ss.shadowRoot.innerHTML += `<script>alert('BREACHED!');`;
     ss.remove(); document.body.append(ss)
   } catch (e) {
     document.body.innerHTML += '<strong> NOT BREACHED!';

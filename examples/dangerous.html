@@ -38,6 +38,6 @@
 
 <script>
   let dz = document.querySelector('danger-zone');
-  dz.shadowRoot.innerHTML += `<script>document.body.innerHTML += '<strong>BREACHED!';`;
+  dz.shadowRoot.innerHTML += `<script>document.body.innerHTML+='<strong>BREACHED!';`;
   dz.remove(); document.body.append(dz)
 </script>
