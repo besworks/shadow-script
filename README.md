@@ -56,3 +56,7 @@ connectedCallback() {
   Function(test.innerHTML).bind(this.shadowRoot)();
 }
 ```
+
+## Discussion
+
+Further discussion on this topic is in https://github.com/WICG/webcomponents/issues/717#issuecomment-1126786185
