@@ -4,8 +4,8 @@
 <script type="module">
   const host = document.querySelector('#test');
   const shadow = host.attachShadow({ mode:'closed' });
-  const scopedEval = (script) => Function(script).bind(shadow)();
   shadow.innerHTML = `<script>alert('SCRIPT DID EXECUTE');`;
   const scripts = shadow.querySelectorAll('script');
+  const scopedEval = (script) => Function(script).bind(shadow)();
   scripts.forEach(s => scopedEval(s.innerHTML));
 </script>
