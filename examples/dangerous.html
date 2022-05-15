@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<title> Open ShadowRoot </title>
+<style> strong { color: red; } </style>
+
+<script>
+  class DangerZoneElement extends HTMLElement {
+    constructor() {
+      super(); this.attachShadow({ mode:'open' });
+      this.shadowRoot.innerHTML = this.template;
+    }
+
+    get template() {
+      return `
+        <style>.passed{color:green}</style>
+        <div id="test">TEST A</div>
+        <slot></slot>
+        <script>
+          let a = this.shadowRoot.querySelector('#test');
+          let b = this.firstElementChild;
+          a && a.classList.add('passed');
+          b && (b.style.color = 'green');
+        <\/script>
+      `;
+    }
+
+    connectedCallback() {
+      const scopedEval = (script) => Function(script).bind(this)();
+      const scripts = this.shadowRoot.querySelectorAll('script');
+      scripts.forEach(s => scopedEval(s.innerHTML));
+    }
+  }
+  customElements.define('danger-zone', DangerZoneElement);
+</script>
+
+<danger-zone>
+  <p> TEST B </p>
+</danger-zone>
+
+<script>
+  let dz = document.querySelector('danger-zone');
+  dz.shadowRoot.innerHTML += `<script>document.body.innerHTML += '<strong>BREACHED!';`;
+  dz.remove(); document.body.append(dz)
+</script>

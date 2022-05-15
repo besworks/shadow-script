@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<title> Closed ShadowRoot </title>
+<style> strong { color: green; } </style>
+
+<script type="module">
+  class ShadowScriptElement extends HTMLElement {
+    #shadowRoot = null;
+    
+    constructor() {
+      super();
+      
+      this.#shadowRoot = this.attachShadow({ mode:'closed' });
+      this.#shadowRoot.innerHTML = this.template;
+    }
+    
+    get template() {
+      return `
+        <style>.passed{color:green}</style>
+        <div id="test"> TEST A </div>
+        <slot></slot>
+        <script>
+          let a = this.querySelector('#test');
+          let b = this.host?.firstElementChild;
+          a && a.classList.add('passed');
+          b && (b.style.color = 'green');
+        <\/script>
+      `;
+    }
+    
+    get #scripts() {
+      return this.#shadowRoot.querySelectorAll('script');
+    }
+    
+    #scopedEval = (script) => 
+      Function(script).bind(this.#shadowRoot)();
+    
+    #processScripts() {
+      this.#scripts.forEach(
+        s => this.#scopedEval(s.innerHTML)
+      );
+    }
+    
+    connectedCallback() {
+      this.#processScripts();
+    }
+  }
+
+  customElements.define('shadow-script', ShadowScriptElement);
+</script>
+
+<shadow-script>
+  <p> TEST B </p>
+</shadow-script>
+
+<script>
+  let ss = document.querySelector('shadow-script');
+  
+  try {
+    ss.shadowRoot.innerHTML += `<script>console.log('BREACHED!')<\/script>`;
+    ss.remove(); document.body.append(ss)
+  } catch (e) {
+    document.body.innerHTML += '<strong> NOT BREACHED!';
+  }
+</script>

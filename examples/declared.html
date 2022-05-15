@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<title> Declared Template </title>
+
+<div id="host"></div>
+
+<template>
+  <script>document.body.textContent='SCRIPT DID EXECUTE';</script>
+</template>
+
+<script>
+  let host = document.querySelector('#host');
+  let shadow = host.attachShadow({ mode:'closed' });
+  let temp = document.querySelector('template');
+  shadow.append(document.importNode(temp.content, true));
+</script>

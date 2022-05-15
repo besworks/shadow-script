@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<title> Scoped Eval </title>
+<div id="test"></div>
+<script type="module">
+  const host = document.querySelector('#test');
+  const shadow = host.attachShadow({ mode:'closed' });
+  const scopedEval = (script) => Function(script).bind(shadow)();
+  shadow.innerHTML = `<script>document.body.innerHTML+='SCRIPT DID EXECUTE';`;
+  const scripts = shadow.querySelectorAll('script');
+  scripts.forEach(s => scopedEval(s.innerHTML));
+</script>

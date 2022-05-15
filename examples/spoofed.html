@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<title> Spoofed Document </title>
+
+<div id="host"></div>
+
+<script type="module">
+  let content = `<template><script>document.body.textContent='SCRIPT DID EXECUTE';`;
+  let doc = new DOMParser().parseFromString(content, 'text/html');
+  let host = document.querySelector('#host');
+  let shadow = host.attachShadow({ mode:'closed' });
+  let temp = doc.querySelector('template');
+  shadow.append(temp.content.cloneNode(true));
+</script>

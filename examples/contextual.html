@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<title> Contextual Fragment </title>
+
+<div id="host"></div>
+
+<script type="module">
+  let host = document.querySelector('#host');
+  let shadow = host.attachShadow({ mode:'closed' });
+  let content = `<script>document.body.textContent='SCRIPT DID EXECUTE';`;
+  let fragment = document.createRange().createContextualFragment(content);
+  shadow.append(document.importNode(fragment, true));
+</script>
