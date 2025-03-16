@@ -2,7 +2,7 @@
 
 Test cases for various methods of injecting scripts into ShadowRoots.
 
-```
+```html
 <div id="host"></div>
 <script type="module">
   let host = document.querySelector('#host');
@@ -36,7 +36,7 @@ Below are two detailed examples of using the **Scoped Evaluation** method. The f
 
 Using the **Closed ShadowRoot Eval** method above causes any script element added to the ShadowRoot to be evaluated on every `connectedCallback`. This might not always be ideal. You may want to do a boolean check to only process the scripts the first time the element is connected to the DOM.
 
-```
+```javascript
 #initialized=false;
 
 connectedCallback() {
@@ -46,7 +46,7 @@ connectedCallback() {
 
 Do not inject untrusted markup into your ShadowRoot while using this technique, any script elements that content might contain will be executed. You will soon be able to use the [Element.setHTML](https://developer.mozilla.org/en-US/docs/Web/API/Element/setHTML) method of the upcoming [HTML Sanitizer API](https://developer.mozilla.org/en-US/docs/Web/API/HTML_Sanitizer_API) to import untrusted markup in a way guaranteed to be free of inline script elements. Until then, a safer method would be to specifically target the script element that you want to execute.
 
-```
+```javascript
 get template() {
   return `<script id="test">console.log(this);`;
 }
